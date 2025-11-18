@@ -34,6 +34,23 @@ export class AuthController {
     return { user: user };
   }
 
+  // 用户登出
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
+    // 将用户登录状态设置为0
+    if (req.user) {
+      await this.authService.logout(req.user['userId']);
+    }
+
+    // 清除cookie中的token
+    res.clearCookie('access_token', { path: '/', sameSite: 'strict' });
+    res.clearCookie('refresh_token', { path: '/', sameSite: 'strict' });
+
+    return { message: '登出成功' };
+  }
+
   // 刷新token
   @Post('refresh')
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
@@ -56,22 +73,7 @@ export class AuthController {
     return { message: 'Token刷新成功', access_token };
   }
 
-  // 用户登出
-  @Post('logout')
-  @UseGuards(AuthGuard('jwt'))
-  async logout(@Res({ passthrough: true }) res: Response) {
-    // 清除cookies
-    res.clearCookie('access_token', {
-      path: '/',
-      sameSite: 'strict',
-    });
-    res.clearCookie('refresh_token', {
-      path: '/',
-      sameSite: 'strict',
-    });
 
-    return { message: '登出成功' };
-  }
 
   // 获取当前用户信息
   @Post('me')

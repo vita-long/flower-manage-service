@@ -13,7 +13,7 @@ import { UserModule } from '../user/user.module';
     PassportModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET', 'your-secret-key'),
+        secret: configService.get<string>('JWT_SECRET', '123456'),
         signOptions: {
           expiresIn: '2h', // access_token 有效期2小时
         },

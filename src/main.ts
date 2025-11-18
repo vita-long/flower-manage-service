@@ -28,10 +28,12 @@ async function bootstrap() {
 
   // 启用CORS
   app.enableCors({
-    origin: '*', // 在生产环境中应该设置具体的前端域名
+    // 当credentials为true时，origin不能使用通配符'*'，需要设置具体的源
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // 允许携带凭证（cookies）
+    exposedHeaders: ['set-cookie'], // 允许前端访问set-cookie响应头
   });
 
   // 设置全局前缀

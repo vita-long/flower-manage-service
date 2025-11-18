@@ -60,6 +60,10 @@ export class AuthService {
       throw new UnauthorizedException('用户已被禁用');
     }
 
+    // 设置登录状态为1
+    user.loginStatus = 1;
+    await this.userService.updateUser(user.id, { loginStatus: 1 });
+
     // 生成双token
     const access_token = this.generateAccessToken(user);
     const refresh_token = this.generateRefreshToken(user);
@@ -71,6 +75,12 @@ export class AuthService {
       access_token,
       refresh_token,
     };
+  }
+
+  // 用户登出
+  async logout(userId: number): Promise<void> {
+    // 将用户登录状态设置为0
+    await this.userService.updateUser(userId, { loginStatus: 0 });
   }
 
   // 刷新access_token

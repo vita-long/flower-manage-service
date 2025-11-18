@@ -23,6 +23,9 @@ export class User {
   @Column({ default: true })
   status: boolean;
 
+  @Column({ default: 0 })
+  loginStatus: number; // 0: 未登录, 1: 已登录
+
   @CreateDateColumn()
   createdAt: Date;
 
