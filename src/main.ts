@@ -2,6 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import cookieParser from 'cookie-parser';
+import { JwtAuthGuard } from './common/guards/auth.guard';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,15 +23,28 @@ async function bootstrap() {
     })
   );
 
+  // 启用cookie-parser中间件
+  app.use(cookieParser());
+
   // 启用CORS
   app.enableCors({
     origin: '*', // 在生产环境中应该设置具体的前端域名
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // 允许携带凭证（cookies）
   });
 
   // 设置全局前缀
   app.setGlobalPrefix('api');
+  
+  // 添加全局认证守卫
+  app.useGlobalGuards(new JwtAuthGuard());
+  
+  // 添加全局响应拦截器
+  app.useGlobalInterceptors(new ResponseInterceptor());
+  
+  // 添加全局异常过滤器
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // 获取端口配置
   const port = configService.get<number>('PORT', 3000);

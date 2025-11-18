@@ -5,6 +5,7 @@ import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { getDatabaseConfig } from './config/database.config';
 
 @Module({
@@ -21,6 +22,7 @@ import { getDatabaseConfig } from './config/database.config';
     ProductModule,
     CategoryModule,
     OrderModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
