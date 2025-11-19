@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import * as path from 'path';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug', 'verbose'] });
@@ -26,10 +28,13 @@ async function bootstrap() {
   // 启用cookie-parser中间件
   app.use(cookieParser());
 
+  // 启用静态文件服务，用于访问上传的文件
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
   // 启用CORS
   app.enableCors({
     // 当credentials为true时，origin不能使用通配符'*'，需要设置具体的源
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // 允许携带凭证（cookies）
@@ -55,4 +60,5 @@ async function bootstrap() {
   await app.listen(port, host);
   console.log(`Server running on http://${host}:${port}`);
 }
+
 bootstrap();
