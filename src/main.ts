@@ -8,7 +8,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug', 'verbose'] });
   const configService = app.get(ConfigService);
 
   // 添加全局验证管道

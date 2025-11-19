@@ -41,7 +41,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       message: exception.message || '服务器内部错误',
       data: null,
     };
-
+    console.log('全局异常捕获:', exception);
     response.status(status).json(errorResponse);
   }
 }
