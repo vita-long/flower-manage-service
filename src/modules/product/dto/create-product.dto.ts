@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsPositive, Min } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean, IsNumber, IsPositive, Min } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty({ message: '商品名称不能为空' })
@@ -22,6 +22,10 @@ export class CreateProductDto {
   @IsOptional()
   @IsString({ message: '商品图片必须是字符串' })
   image?: string;
+
+  @IsOptional()
+  @IsBoolean({ message: '商品状态必须是布尔值' })
+  status?: boolean;
 
   @IsNotEmpty({ message: '商品分类不能为空' })
   @IsNumber({}, { message: '商品分类ID必须是数字' })

@@ -31,7 +31,7 @@ export class ProductService {
   }
 
   // 获取所有商品（带分页）
-  async getAllProducts(page: number = 1, pageSize: number = 10): Promise<{ items: Product[]; total: number }> {
+  async getAllProducts(page: number = 1, pageSize: number = 10): Promise<{ list: Product[]; total: number }> {
     const [items, total] = await this.productRepository.findAndCount({
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -39,7 +39,7 @@ export class ProductService {
       order: { createdAt: 'DESC' },
     });
 
-    return { items, total };
+    return { list: items, total };
   }
 
   // 根据ID获取商品

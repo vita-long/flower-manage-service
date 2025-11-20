@@ -18,7 +18,7 @@ export class ProductController {
   async getAllProducts(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
-  ): Promise<{ items: Product[]; total: number }> {
+  ): Promise<{ list: Product[]; total: number }> {
     return this.productService.getAllProducts(page, pageSize);
   }
 

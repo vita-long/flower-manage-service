@@ -69,7 +69,7 @@ export class UploadService {
       fs.writeFileSync(filePath, file.buffer);
       
       // 返回可访问的文件URL路径
-      const returnPath = `/uploads/${uploadType}/${fileName}`;
+      const returnPath = `http://localhost:3000/uploads/${uploadType}/${fileName}`;
       this.logger.log(`文件上传成功 - 原文件名: ${file.originalname}, 保存路径: ${filePath}, 返回路径: ${returnPath}`);
       return returnPath;
     } catch (error) {
