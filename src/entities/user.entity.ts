@@ -1,34 +1,34 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('users')
+@Entity({ name: 'users', comment: '用户表' })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ comment: '用户ID' })
   id: number;
 
-  @Column({ length: 50, unique: true })
+  @Column({ length: 50, unique: true, comment: '用户名' })
   username: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, comment: '密码（加密存储）' })
   password: string;
 
-  @Column({ length: 20, nullable: true })
+  @Column({ length: 20, nullable: true, comment: '手机号' })
   phone?: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100, nullable: true, comment: '邮箱' })
   email?: string;
 
-  @Column({ default: 0 })
-  role: number; // 0: 普通用户, 1: 管理员
+  @Column({ default: 0, comment: '用户角色：0普通用户，1管理员' })
+  role: number;
 
-  @Column({ default: true })
+  @Column({ default: true, comment: '用户状态：true启用，false禁用' })
   status: boolean;
 
-  @Column({ default: 0 })
-  loginStatus: number; // 0: 未登录, 1: 已登录
+  @Column({ default: 0, comment: '登录状态：0未登录，1已登录' })
+  loginStatus: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ comment: '创建时间' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ comment: '更新时间' })
   updatedAt: Date;
 }
