@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { LoggerInterceptor } from './common/interceptors/logger.interceptor';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import * as path from 'path';
 import * as express from 'express';
@@ -47,6 +48,8 @@ async function bootstrap() {
   // 添加全局认证守卫
   app.useGlobalGuards(new JwtAuthGuard());
   
+  // 添加全局日志拦截器
+  app.useGlobalInterceptors(new LoggerInterceptor());
   // 添加全局响应拦截器
   app.useGlobalInterceptors(new ResponseInterceptor());
   
