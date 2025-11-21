@@ -18,8 +18,9 @@ export class ProductController {
   async getAllProducts(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
+    @Query('keyword') keyword?: string,
   ): Promise<{ list: Product[]; total: number }> {
-    return this.productService.getAllProducts(page, pageSize);
+    return this.productService.getAllProducts(page, pageSize, keyword);
   }
 
   // 根据ID获取商品

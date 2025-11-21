@@ -7,6 +7,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 import { getDatabaseConfig } from './config/database.config';
 
 @Module({
@@ -25,6 +26,7 @@ import { getDatabaseConfig } from './config/database.config';
     OrderModule,
     AuthModule,
     UploadModule,
+    InventoryModule,
   ],
   controllers: [],
   providers: [],

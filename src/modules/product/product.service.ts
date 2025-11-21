@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Product } from '../../entities/product.entity';
 import { Category } from '../../entities/category.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -31,11 +31,15 @@ export class ProductService {
   }
 
   // 获取所有商品（带分页）
-  async getAllProducts(page: number = 1, pageSize: number = 10): Promise<{ list: Product[]; total: number }> {
+  async getAllProducts(page: number = 1, pageSize: number = 10, keyword?: string): Promise<{ list: Product[]; total: number }> {
+    console.log(keyword)
     const [items, total] = await this.productRepository.findAndCount({
       skip: (page - 1) * pageSize,
       take: pageSize,
       relations: ['category'],
+      where: keyword ? {
+        name: Like(`%${keyword}%`),
+      } : {},
       order: { createdAt: 'DESC' },
     });
 
@@ -105,5 +109,40 @@ export class ProductService {
       .orWhere('product.description LIKE :keyword', { keyword: `%${keyword}%` })
       .leftJoinAndSelect('product.category', 'category')
       .getMany();
+  }
+  
+  // 获取商品数据用于导出
+  async getProductsForExport(keyword?: string, stockStatus?: string): Promise<Product[]> {
+    const queryBuilder = this.productRepository.createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category');
+    
+    // 关键词搜索
+    if (keyword) {
+      queryBuilder.where('product.name LIKE :keyword', { keyword: `%${keyword}%` })
+        .orWhere('product.description LIKE :keyword', { keyword: `%${keyword}%` });
+    }
+    
+    // 库存状态过滤
+    if (stockStatus) {
+      switch (stockStatus) {
+        case 'outOfStock':
+          queryBuilder.andWhere('product.stock <= 0');
+          break;
+        case 'lowStock':
+          queryBuilder.andWhere('product.stock > 0 AND product.stock <= 10');
+          break;
+        case 'normal':
+          queryBuilder.andWhere('product.stock > 10 AND product.stock <= 50');
+          break;
+        case 'sufficient':
+          queryBuilder.andWhere('product.stock > 50');
+          break;
+      }
+    }
+    
+    // 排序
+    queryBuilder.orderBy('product.name', 'ASC');
+    
+    return queryBuilder.getMany();
   }
 }
