@@ -24,8 +24,8 @@ export class Product {
   @ManyToOne(() => Category, category => category.products)
   category: Category; // 关联的分类
 
-  @Column({ default: true, comment: '商品是否激活' })
-  isActive: boolean;
+  @Column({ default: true, comment: '商品状态：true为上架，false为下架' })
+  status: boolean;
 
   @CreateDateColumn({ comment: '创建时间' })
   createdAt: Date;
